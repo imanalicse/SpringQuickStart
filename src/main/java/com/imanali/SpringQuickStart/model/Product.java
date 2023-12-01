@@ -1,6 +1,7 @@
-package com.imanali.SpringQuickStart.api.product;
+package com.imanali.SpringQuickStart.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotEmpty;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
@@ -14,15 +15,19 @@ public class Product {
 
     @GeneratedValue(strategy = GenerationType.UUID)
     @Column(unique = true, nullable = false)
-    private UUID uuid;
+    private String uuid;
+    @NotEmpty
+    @Column(nullable = false)
     private String name;
+
+    private String image;
     private float price;
     private LocalDateTime created_at;
 
     public Product() {
     }
 
-    public Product(Long id, UUID uuid, String name, float price, LocalDateTime created_at) {
+    public Product(Long id, String uuid, String name, float price, LocalDateTime created_at) {
         this.id = id;
         this.uuid = uuid;
         this.name = name;
@@ -36,6 +41,11 @@ public class Product {
         this.created_at = created_at;
     }
 
+    public Product(String name, float price) {
+        this.name = name;
+        this.price = price;
+    }
+
     public Long getId() {
         return id;
     }
@@ -44,11 +54,11 @@ public class Product {
         this.id = id;
     }
 
-    public UUID getUuid() {
+    public String getUuid() {
         return uuid;
     }
 
-    public void setUuid(UUID uuid) {
+    public void setUuid(String uuid) {
         this.uuid = uuid;
     }
 
@@ -58,6 +68,14 @@ public class Product {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
     }
 
     public float getPrice() {
