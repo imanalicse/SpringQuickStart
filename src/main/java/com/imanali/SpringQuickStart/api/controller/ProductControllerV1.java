@@ -1,8 +1,8 @@
-package com.imanali.SpringQuickStart.api.product;
+package com.imanali.SpringQuickStart.api.controller;
 
 import com.imanali.SpringQuickStart.model.Product;
 import com.imanali.SpringQuickStart.service.ProductService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,14 +15,10 @@ import java.util.*;
 
 @RestController
 @RequestMapping(path = "api/v1/products")
-public class ProductController {
+@AllArgsConstructor
+public class ProductControllerV1 {
+
     private ProductService productService;
-
-    @Autowired
-    public ProductController(ProductService productService) {
-        this.productService = productService;
-    }
-
     @GetMapping
     public ResponseEntity<List<Product>> getProducts() {
         List<Product> products = productService.getProducts();

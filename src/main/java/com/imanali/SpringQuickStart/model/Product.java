@@ -2,12 +2,16 @@ package com.imanali.SpringQuickStart.model;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotEmpty;
+import lombok.*;
 
 import java.time.LocalDateTime;
-import java.util.UUID;
 
 @Entity
 @Table(name = "products")
+@ToString
+@AllArgsConstructor
+@NoArgsConstructor
+@EqualsAndHashCode
 public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -16,6 +20,7 @@ public class Product {
     @GeneratedValue(strategy = GenerationType.UUID)
     @Column(unique = true, nullable = false)
     private String uuid;
+
     @NotEmpty
     @Column(nullable = false)
     private String name;
@@ -23,28 +28,6 @@ public class Product {
     private String image;
     private float price;
     private LocalDateTime created_at;
-
-    public Product() {
-    }
-
-    public Product(Long id, String uuid, String name, float price, LocalDateTime created_at) {
-        this.id = id;
-        this.uuid = uuid;
-        this.name = name;
-        this.price = price;
-        this.created_at = created_at;
-    }
-
-    public Product(String name, float price, LocalDateTime created_at) {
-        this.name = name;
-        this.price = price;
-        this.created_at = created_at;
-    }
-
-    public Product(String name, float price) {
-        this.name = name;
-        this.price = price;
-    }
 
     public Long getId() {
         return id;
@@ -92,16 +75,5 @@ public class Product {
 
     public void setCreated_at(LocalDateTime created_at) {
         this.created_at = created_at;
-    }
-
-    @Override
-    public String toString() {
-        return "Product{" +
-                "id=" + id +
-                ", uuid=" + uuid +
-                ", name='" + name + '\'' +
-                ", price=" + price +
-                ", created_at=" + created_at +
-                '}';
     }
 }

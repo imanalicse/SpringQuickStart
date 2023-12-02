@@ -1,4 +1,4 @@
-package com.imanali.SpringQuickStart.api.product;
+package com.imanali.SpringQuickStart.repository;
 
 import com.imanali.SpringQuickStart.model.Product;
 import org.springframework.data.jpa.repository.JpaRepository;

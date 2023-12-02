@@ -1,8 +1,9 @@
 package com.imanali.SpringQuickStart.service;
 
 import com.imanali.SpringQuickStart.model.Product;
-import com.imanali.SpringQuickStart.api.product.ProductRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.imanali.SpringQuickStart.repository.ProductRepository;
+import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
@@ -11,16 +12,14 @@ import java.util.Optional;
 import java.util.UUID;
 
 @Component
+@AllArgsConstructor
+@Slf4j
 public class ProductService {
 
     private final ProductRepository productRepository;
 
-    @Autowired
-    public ProductService(ProductRepository productRepository) {
-        this.productRepository = productRepository;
-    }
-
     public List<Product> getProducts() {
+        log.info("getProducts was called");
         try {
             return productRepository.findAll();
         }
