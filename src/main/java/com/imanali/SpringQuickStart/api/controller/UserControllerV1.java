@@ -1,5 +1,6 @@
 package com.imanali.SpringQuickStart.api.controller;
 
+import com.imanali.SpringQuickStart.api.response.DataResponseModel;
 import com.imanali.SpringQuickStart.api.response.ResponseHandler;
 import com.imanali.SpringQuickStart.dto.UserDto;
 import com.imanali.SpringQuickStart.exception.UserNotFoundException;
@@ -7,7 +8,6 @@ import com.imanali.SpringQuickStart.model.User;
 import com.imanali.SpringQuickStart.service.UserService;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -24,7 +24,7 @@ public class UserControllerV1 {
     private UserService userService;
 
     @PostMapping("/signup")
-    public ResponseEntity<Object> saveUser(@RequestBody @Valid UserDto userDto) {
+    public ResponseEntity<DataResponseModel> saveUser(@RequestBody @Valid UserDto userDto) {
         User user = userService.addUser(userDto);
         Map<String, Object> data = new HashMap<>();
         data.put("user", user);
@@ -32,7 +32,7 @@ public class UserControllerV1 {
     }
 
     @GetMapping()
-    public ResponseEntity<Object> getAllUser() {
+    public ResponseEntity<DataResponseModel> getAllUser() {
         List<User> users = userService.getAllUsers();
         Map<String, Object> data = new HashMap<>();
         data.put("users", users);
@@ -40,10 +40,10 @@ public class UserControllerV1 {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Object> getUser(@PathVariable Long id) throws UserNotFoundException {
+    public ResponseEntity<DataResponseModel> getUser(@PathVariable Long id) throws UserNotFoundException {
         User user = userService.getUser(id);
         Map<String, Object> data = new HashMap<>();
-        data.put("users", user);
+        data.put("user", user);
         return ResponseHandler.oKResponse(data);
     }
 }
