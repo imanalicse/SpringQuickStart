@@ -16,7 +16,7 @@ public class UserDto {
     private String email;
 
     @NotNull
-    @Pattern(regexp = "\\+-[0-9]", message = "Invalid mobile number")
+    // @Pattern(regexp = "0-9", message = "Invalid mobile number")
     private String mobile;
     private String gender;
 

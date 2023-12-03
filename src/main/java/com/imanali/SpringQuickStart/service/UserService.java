@@ -14,7 +14,7 @@ public class UserService {
     @Autowired
     private UserRepository userRepository;
 
-    public User addNewUser(UserDto userDto) {
+    public User addUser(UserDto userDto) {
         User user = User.build(0L, userDto.getName(), userDto.getEmail(),
                 userDto.getMobile(), userDto.getGender(), userDto.getAge(), userDto.getNationality());
        return userRepository.save(user);
