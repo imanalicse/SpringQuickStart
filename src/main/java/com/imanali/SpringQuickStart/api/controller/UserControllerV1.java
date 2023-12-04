@@ -6,6 +6,7 @@ import com.imanali.SpringQuickStart.dto.UserDto;
 import com.imanali.SpringQuickStart.exception.UserNotFoundException;
 import com.imanali.SpringQuickStart.model.User;
 import com.imanali.SpringQuickStart.service.UserService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -18,6 +19,7 @@ import java.util.Map;
 @RestController
 @RequestMapping("/api/v1/users")
 @AllArgsConstructor
+@Tag(name = "User")
 public class UserControllerV1 {
 
     private UserService userService;
