@@ -25,8 +25,8 @@ public class UserControllerV1 {
     private UserService userService;
 
     @PostMapping("/signup")
-    public ResponseEntity<DataResponseModel> saveUser(@RequestBody @Valid UserDto userDto) {
-        User user = userService.addUser(userDto);
+    public ResponseEntity<DataResponseModel> saveUser(@RequestBody @Valid User user1) {
+        User user = userService.addUser(user1);
         Map<String, Object> data = new HashMap<>();
         data.put("user", user);
         return ResponseHandler.createdResponse(data);
