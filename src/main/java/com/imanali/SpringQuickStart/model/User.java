@@ -11,13 +11,12 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
 import java.util.List;
-
-@Entity
-@Table
 @Data
 @Builder
-@AllArgsConstructor(staticName = "build")
 @NoArgsConstructor
+@AllArgsConstructor()
+@Entity
+@Table
 public class User implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -29,7 +28,6 @@ public class User implements UserDetails {
 
     @Enumerated(EnumType.STRING)
     private Role role;
-
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
