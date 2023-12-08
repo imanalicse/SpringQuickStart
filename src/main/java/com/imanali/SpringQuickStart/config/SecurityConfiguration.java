@@ -17,38 +17,25 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @AllArgsConstructor
 public class SecurityConfiguration {
     private static final String[] WHITE_LIST_URLS = {
-      "/swagger-ui/**"
+      "/swagger-ui.html",
+      "/swagger-ui/**",
     };
     private final JwtAuthenticationFilter jwtAuthFilter;
     private final AuthenticationProvider authenticationProvider;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-/*
         http
-               .csrf(AbstractHttpConfigurer::disable)
-               .authorizeHttpRequests(req ->
-                       req.requestMatchers(WHITE_LIST_URLS)
-                               .permitAll()
-                               .requestMatchers("/api/v1/auth/**")
-                               .authenticated()
-               )
-               .sessionManagement(session -> session.sessionCreationPolicy(STATELESS))
-               .authenticationProvider(authenticationProvider)
-               .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
-*/
-        http
-                .csrf()
-                .disable()
-                .authorizeHttpRequests()
-                .requestMatchers("/api/v1/auth/**")
-                .permitAll()
-                .anyRequest()
-                .authenticated()
-                .and()
-                .sessionManagement()
-                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                .and()
+                .csrf(AbstractHttpConfigurer::disable)
+                .authorizeHttpRequests(res ->
+                        res.requestMatchers(WHITE_LIST_URLS)
+                                .permitAll()
+                                .requestMatchers("/api/v1/auth/**")
+                                .permitAll()
+                                .anyRequest()
+                                .authenticated()
+                 )
+                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authenticationProvider(authenticationProvider)
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
 
