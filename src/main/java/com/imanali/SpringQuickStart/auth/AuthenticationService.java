@@ -1,7 +1,6 @@
 package com.imanali.SpringQuickStart.auth;
 
 import com.imanali.SpringQuickStart.config.JwtService;
-import com.imanali.SpringQuickStart.model.Role;
 import com.imanali.SpringQuickStart.model.User;
 import com.imanali.SpringQuickStart.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
