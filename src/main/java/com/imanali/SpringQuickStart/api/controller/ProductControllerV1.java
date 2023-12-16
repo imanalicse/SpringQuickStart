@@ -85,8 +85,9 @@ public class ProductControllerV1 {
     }
 
     @PutMapping("/{id}")
-    public void updateProduct(@PathVariable("id") Long id, @RequestBody Product product) {
-        productService.updateProduct(id, product);
+    public Product updateProduct(@PathVariable("id") Long id, @RequestBody Product product) {
+      Product product1 = productService.updateProduct(id, product);
+      return  product1;
     }
     @DeleteMapping(path = "{id}")
     public ResponseEntity<?> deleteProduct(@PathVariable Long id) {
