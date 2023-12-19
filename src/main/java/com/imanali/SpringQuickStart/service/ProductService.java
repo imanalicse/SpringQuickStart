@@ -43,18 +43,15 @@ public class ProductService {
        return productRepository.save(product);
     }
 
-    public void updateProduct(Long id, Product product) {
-        productRepository.findById(id)
+    public Product updateProduct(Long id, Product product) {
+      return productRepository.findById(id)
                 .map(product1 -> {
                     product1.setName(product.getName());
                     product1.setPrice(product.getPrice());
                     return productRepository.save(product1);
                 })
                 .orElseGet(() -> {
-//                        product.setId(id);
-//                        return productRepository.save(product);
                         throw new IllegalStateException("Product not found with id "+ id);
-
                 });
     }
 

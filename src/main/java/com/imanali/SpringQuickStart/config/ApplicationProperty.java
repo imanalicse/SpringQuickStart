@@ -8,7 +8,7 @@ import org.springframework.core.env.Environment;
 public class ApplicationProperty {
     @Autowired
     private Environment env;
-    public String getJwtSecretKey() {
-        return env.getProperty("security.jwt.secret-key");
+    public String getProperty(String key) {
+        return env.getProperty(key);
     }
 }
