@@ -35,7 +35,6 @@ public class ProductService {
 
     public Product addNewProduct(Product product) {
         product.setUuid(UUID.randomUUID().toString());
-        product.setCreated_at(LocalDateTime.now());
         System.out.println(product);
         if (product.getPrice() < 0) {
             throw new IllegalStateException("Price cannot be negative");

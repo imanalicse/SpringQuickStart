@@ -34,25 +34,8 @@ public class AuthenticationService {
                 .password(passwordEncoder.encode(request.getPassword()))
                 .role(request.getRole())
                 .build();
-        return generateTokenResponse(user);
-    }
-
-    public AuthenticationResponse generateTokenResponse(User user, Boolean revokeExistingToken) {
-        if (revokeExistingToken) {
-            revokeAllUserTokens(user);
-        }
-        return generateTokenResponse(user);
-    }
-    public AuthenticationResponse generateTokenResponse(User user) {
-        var jwtToken = jwtService.generateAccessToken(user);
-        var refreshToken = jwtService.generateRefreshToken(user);
-        saveUserToken(user, jwtToken);
-        return AuthenticationResponse.builder()
-                .accessToken(jwtToken)
-                .tokenType("Bearer")
-                .expiresIn(jwtService.getAccessTokenExpiration())
-                .refreshToken(refreshToken)
-                .build();
+        var savedUser = repository.save(user);
+        return generateTokenResponse(savedUser);
     }
 
     public AuthenticationResponse authenticate(AuthenticationRequest request) {
@@ -65,28 +48,6 @@ public class AuthenticationService {
         var user = repository.findByEmail(request.getEmail())
                 .orElseThrow();
         return generateTokenResponse(user, true);
-    }
-
-    private void saveUserToken(User user, String jwtToken) {
-        var token = Token.builder()
-                .user(user)
-                .token(jwtToken)
-                .tokenType(TokenType.BEARER)
-                .expired(false)
-                .revoked(false)
-                .build();
-        tokenRepository.save(token);
-    }
-
-    private void revokeAllUserTokens(User user) {
-        var validUserTokens = tokenRepository.findAllValidTokenByUser(user.getId());
-        if (validUserTokens.isEmpty())
-            return;
-        validUserTokens.forEach(token -> {
-            token.setExpired(true);
-            token.setRevoked(true);
-        });
-        tokenRepository.saveAll(validUserTokens);
     }
 
     public void refreshToken(HttpServletRequest request, HttpServletResponse response) throws IOException {
@@ -114,5 +75,45 @@ public class AuthenticationService {
                 new ObjectMapper().writeValue(response.getOutputStream(), authResponse);
             }
         }
+    }
+
+    private void saveUserToken(User user, String jwtToken) {
+        var token = Token.builder()
+                .user(user)
+                .token(jwtToken)
+                .tokenType(TokenType.BEARER)
+                .expired(false)
+                .revoked(false)
+                .build();
+        tokenRepository.save(token);
+    }
+
+    private void revokeAllUserTokens(User user) {
+        var validUserTokens = tokenRepository.findAllValidTokenByUser(user.getId());
+        if (validUserTokens.isEmpty())
+            return;
+        validUserTokens.forEach(token -> {
+            token.setExpired(true);
+            token.setRevoked(true);
+        });
+        tokenRepository.saveAll(validUserTokens);
+    }
+
+    public AuthenticationResponse generateTokenResponse(User user, Boolean revokeExistingToken) {
+        if (revokeExistingToken) {
+            revokeAllUserTokens(user);
+        }
+        return generateTokenResponse(user);
+    }
+    public AuthenticationResponse generateTokenResponse(User user) {
+        var jwtToken = jwtService.generateAccessToken(user);
+        var refreshToken = jwtService.generateRefreshToken(user);
+        saveUserToken(user, jwtToken);
+        return AuthenticationResponse.builder()
+                .accessToken(jwtToken)
+                .tokenType("Bearer")
+                .expiresIn(jwtService.getAccessTokenExpiration())
+                .refreshToken(refreshToken)
+                .build();
     }
 }
