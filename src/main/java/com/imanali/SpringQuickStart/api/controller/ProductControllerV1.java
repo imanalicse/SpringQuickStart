@@ -1,16 +1,16 @@
 package com.imanali.SpringQuickStart.api.controller;
 
+import com.imanali.SpringQuickStart.exception.RecordNotFoundException;
 import com.imanali.SpringQuickStart.model.Product;
 import com.imanali.SpringQuickStart.service.ProductService;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.util.*;
 
@@ -33,17 +33,14 @@ public class ProductControllerV1 {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<?> getProduct(@PathVariable Long id) {
-        Optional<Product> product = productService.getProduct(id);
-        if (product.isEmpty()) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Product not found");
-        }
+    public ResponseEntity<?> getProduct(@PathVariable Long id) throws RecordNotFoundException {
+        Product product = productService.getProduct(id);
         HttpHeaders headers = new HttpHeaders();
         return new ResponseEntity<>(product, headers, HttpStatus.OK);
     }
 
     @PostMapping
-    public Product addProduct(@RequestBody Product product) {
+    public Product addProduct(@RequestBody @Valid Product product) {
         return productService.addNewProduct(product);
     }
 
@@ -53,7 +50,7 @@ public class ProductControllerV1 {
       return  product1;
     }
     @DeleteMapping(path = "{id}")
-    public ResponseEntity<?> deleteProduct(@PathVariable Long id) {
+    public ResponseEntity<?> deleteProduct(@PathVariable Long id) throws RecordNotFoundException {
         productService.deleteProduct(id);
         return ResponseEntity.noContent().build();
     }

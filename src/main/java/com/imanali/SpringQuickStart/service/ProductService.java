@@ -1,5 +1,6 @@
 package com.imanali.SpringQuickStart.service;
 
+import com.imanali.SpringQuickStart.exception.RecordNotFoundException;
 import com.imanali.SpringQuickStart.model.Product;
 import com.imanali.SpringQuickStart.repository.ProductRepository;
 import lombok.AllArgsConstructor;
@@ -29,8 +30,8 @@ public class ProductService {
         return null;
     }
 
-    public Optional<Product> getProduct(Long id) {
-        return productRepository.findById(id);
+    public Product getProduct(Long id) throws RecordNotFoundException {
+        return productRepository.findById(id).orElseThrow(()-> new RecordNotFoundException("Product not found"));
     }
 
     public Product addNewProduct(Product product) {
@@ -54,10 +55,10 @@ public class ProductService {
                 });
     }
 
-    public void deleteProduct(Long id) {
+    public void deleteProduct(Long id) throws RecordNotFoundException {
         boolean exists = productRepository.existsById(id);
         if (!exists) {
-            throw new IllegalStateException("Product with id " + id + " does not exists");
+            throw new RecordNotFoundException("Product does not exists");
         }
         productRepository.deleteById(id);
     }
