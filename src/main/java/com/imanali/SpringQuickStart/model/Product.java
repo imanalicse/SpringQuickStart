@@ -25,6 +25,8 @@ public class Product {
     @Column(nullable = false)
     private String name;
 
+    private String image;
+
     @Column(nullable = false)
     private float price;
 }

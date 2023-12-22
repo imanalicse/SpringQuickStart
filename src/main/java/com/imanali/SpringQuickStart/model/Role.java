@@ -29,6 +29,13 @@ public enum Role {
             MANAGER_UPDATE,
             MANAGER_DELETE,
             MANAGER_CREATE
+    )),
+
+    CUSTOMER(Set.of(
+            CUSTOMER_READ,
+            CUSTOMER_UPDATE,
+            CUSTOMER_DELETE,
+            CUSTOMER_CREATE
     ));
 
     @Getter
