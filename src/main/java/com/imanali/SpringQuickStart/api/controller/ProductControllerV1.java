@@ -15,6 +15,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -39,6 +40,22 @@ public class ProductControllerV1 {
     @GetMapping("/{page}/{limit}")
     public ResponseEntity<DataResponseModel> getProductWithPagination(@PathVariable int page, @PathVariable int limit) {
         List<Product> products = productService.productsWithPagination(page, limit);
+        Integer total = productService.countProducts();
+        Map<String, Object> data = new HashMap<>();
+        data.put("products", products);
+
+        HashMap<String, Integer> pagination = new HashMap<>();
+        pagination.put("total", total);
+        pagination.put("page", page);
+        pagination.put("limit", limit);
+        data.put("pagination", pagination);
+        return ResponseHandler.oKResponse(data);
+    }
+
+    @GetMapping("/{page}/{limit}/{sortField}")
+    public ResponseEntity<DataResponseModel> getProductWithPagination(@PathVariable int page, @PathVariable int limit, @PathVariable String sortField) {
+
+        List<Product> products = productService.productsWithPaginationAndSort(page, limit, sortField);
         Integer total = productService.countProducts();
         Map<String, Object> data = new HashMap<>();
         data.put("products", products);

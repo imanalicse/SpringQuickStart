@@ -7,6 +7,7 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -25,6 +26,12 @@ public class ProductService {
 
     public List<Product> productsWithPagination(int page, int limit) {
         Pageable pageable = PageRequest.of(page, limit);
+        List<Product> products = productRepository.findAll(pageable).getContent();
+        return products;
+    }
+
+    public List<Product> productsWithPaginationAndSort(int page, int limit, String sortFiled) {
+        Pageable pageable = PageRequest.of(page, limit, Sort.by(sortFiled).ascending());
         List<Product> products = productRepository.findAll(pageable).getContent();
         return products;
     }
