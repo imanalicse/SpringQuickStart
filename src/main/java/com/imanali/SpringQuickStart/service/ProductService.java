@@ -5,11 +5,11 @@ import com.imanali.SpringQuickStart.model.Product;
 import com.imanali.SpringQuickStart.repository.ProductRepository;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 
-import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 @Component
@@ -20,14 +20,17 @@ public class ProductService {
     private final ProductRepository productRepository;
 
     public List<Product> getProducts() {
-        log.info("getProducts was called");
-        try {
-            return productRepository.findAll();
-        }
-        catch (Exception exception) {
-            exception.printStackTrace();
-        }
-        return null;
+        return productRepository.findAll();
+    }
+
+    public List<Product> productsWithPagination(int page, int limit) {
+        Pageable pageable = PageRequest.of(page, limit);
+        List<Product> products = productRepository.findAll(pageable).getContent();
+        return products;
+    }
+
+    public Integer countProducts() {
+        return Math.toIntExact(productRepository.count());
     }
 
     public Product getProduct(Long id) throws RecordNotFoundException {
