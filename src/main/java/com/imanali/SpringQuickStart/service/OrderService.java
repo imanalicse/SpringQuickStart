@@ -24,7 +24,7 @@ public class OrderService {
                     return super.getMessage();
                 }
             });
-            order.setFirstname(user.getFirstname());
+            order.setFirstname(user.getFirstName());
             order.setUser(user);
             return orderRepository.save(order);
         }

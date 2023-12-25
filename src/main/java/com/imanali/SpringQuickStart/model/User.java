@@ -6,18 +6,18 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import javax.swing.*;
 import java.util.Collection;
-import java.util.List;
+
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor()
 @Entity
-@Table(uniqueConstraints = @UniqueConstraint(
+@Table(
+        name = "users",
+        uniqueConstraints = @UniqueConstraint(
         name = "unique_email",
         columnNames = "email"
 ))
@@ -27,18 +27,20 @@ public class User implements UserDetails {
     private Long id;
 
     @Column(nullable = false)
-    private String firstname;
+    private String firstName;
 
-    private String lastname;
+    private String lastName;
 
     @Column(name = "email", nullable = false)
     private String email;
 
-    @Column(nullable = false)
+    @Column(length = 60)
     private String password;
 
     @Enumerated(EnumType.STRING)
     private Role role;
+
+    private boolean enabled = false;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

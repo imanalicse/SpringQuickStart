@@ -10,7 +10,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import java.security.SecureRandom;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
 @SpringBootTest
 class UserRepositoryTest {
     @Autowired
@@ -27,8 +26,8 @@ class UserRepositoryTest {
         List<User> userList = userRepository.findAll();
         if (userList.isEmpty()) {
             User admin = User.builder()
-                    .firstname("Iman")
-                    .lastname("Ali")
+                    .firstName("Iman")
+                    .lastName("Ali")
                     .email("iman@gmail.com")
                     .password(encodedPassword)
                     .role(Role.ADMIN)
@@ -36,8 +35,8 @@ class UserRepositoryTest {
             userRepository.save(admin);
 
             User manager = User.builder()
-                    .firstname("Ishak")
-                    .lastname("Ahmed")
+                    .firstName("Ishak")
+                    .lastName("Ahmed")
                     .email("ishak@gmail.com")
                     .password(encodedPassword)
                     .role(Role.MANAGER)
@@ -45,8 +44,8 @@ class UserRepositoryTest {
             userRepository.save(manager);
 
             User customer = User.builder()
-                    .firstname("Ismail")
-                    .lastname("Ahmed")
+                    .firstName("Ismail")
+                    .lastName("Ahmed")
                     .email("ismail@gmail.com")
                     .password(encodedPassword)
                     .role(Role.CUSTOMER)
