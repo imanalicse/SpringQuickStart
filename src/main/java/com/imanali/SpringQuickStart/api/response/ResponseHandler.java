@@ -9,7 +9,7 @@ public class ResponseHandler {
     private static DataResponseModel generateSuccessResponse(Map<String, Object> data, HttpStatus httpStatus) {
         DataResponseModel dataResponseModel = new DataResponseModel();
         dataResponseModel.setStatus(true);
-        dataResponseModel.setStatus_code(httpStatus.value());
+        dataResponseModel.setStatusCode(httpStatus.value());
         dataResponseModel.setData(data);
         return dataResponseModel;
     }
