@@ -1,6 +1,7 @@
 package com.imanali.SpringQuickStart.service;
 
 import com.imanali.SpringQuickStart.exception.RecordNotFoundException;
+import com.imanali.SpringQuickStart.model.Category;
 import com.imanali.SpringQuickStart.model.Product;
 import com.imanali.SpringQuickStart.repository.ProductRepository;
 import lombok.AllArgsConstructor;
@@ -50,6 +51,12 @@ public class ProductService {
         if (product.getPrice() < 0) {
             throw new IllegalStateException("Price cannot be negative");
         }
+        /*
+        Category category = Category.builder()
+                .name("Test category")
+                .build();
+        product.addCategory(category);
+        */
        return productRepository.save(product);
     }
 

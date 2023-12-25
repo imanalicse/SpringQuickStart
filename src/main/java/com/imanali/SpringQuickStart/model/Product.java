@@ -1,13 +1,17 @@
 package com.imanali.SpringQuickStart.model;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
-import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Data
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
@@ -29,4 +33,25 @@ public class Product {
 
     @Column(nullable = false)
     private float price;
+
+    @ManyToMany(
+            cascade = CascadeType.ALL
+    )
+    @JoinTable(
+            name = "categories_products",
+            joinColumns = @JoinColumn(
+                    name = "product_id",
+                    referencedColumnName = "id"
+            ),
+            inverseJoinColumns = @JoinColumn(
+                    name = "category_id",
+                    referencedColumnName = "id"
+            )
+    )
+    private List<Category> categories;
+
+    public void addCategory(Category category) {
+        if (categories == null) categories = new ArrayList<>();
+        categories.add(category);
+    }
 }

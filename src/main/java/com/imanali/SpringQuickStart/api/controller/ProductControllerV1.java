@@ -4,7 +4,6 @@ import com.imanali.SpringQuickStart.api.response.DataResponseModel;
 import com.imanali.SpringQuickStart.api.response.ResponseHandler;
 import com.imanali.SpringQuickStart.exception.RecordNotFoundException;
 import com.imanali.SpringQuickStart.model.Product;
-import com.imanali.SpringQuickStart.repository.ProductRepository;
 import com.imanali.SpringQuickStart.service.ProductService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
@@ -15,7 +14,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
