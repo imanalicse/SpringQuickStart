@@ -26,6 +26,8 @@ import static com.imanali.SpringQuickStart.model.Role.MANAGER;
 @AllArgsConstructor
 public class SecurityConfiguration {
     private static final String[] WHITE_LIST_URLS = {
+            "/**",
+            "/verifyRegistration**",
             "/api/v1/auth/**",
             "/v2/api-docs",
             "/v3/api-docs",
@@ -37,7 +39,6 @@ public class SecurityConfiguration {
             "/swagger-ui/**",
             "/webjars/**",
             "/swagger-ui.html",
-            "/public/**",
     };
     private final JwtAuthenticationFilter jwtAuthFilter;
     private final AuthenticationProvider authenticationProvider;

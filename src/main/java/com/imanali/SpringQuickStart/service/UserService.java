@@ -8,6 +8,7 @@ import com.imanali.SpringQuickStart.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Calendar;
 import java.util.List;
 
 @Service
@@ -34,5 +35,21 @@ public class UserService {
     public void saveRegistrationVerificationTokenForUser(String token, User user) {
         RegistrationVerificationToken registrationVerificationToken = new RegistrationVerificationToken(user, token);
         registrationVerificationTokenRepository.save(registrationVerificationToken);
+    }
+
+    public String validateRegistrationVerification(String token) {
+        RegistrationVerificationToken registrationVerificationToken = registrationVerificationTokenRepository.findByToken(token);
+        if (registrationVerificationToken == null) {
+            return "invalid";
+        }
+        User user = registrationVerificationToken.getUser();
+        Calendar cal = Calendar.getInstance();
+        if (registrationVerificationToken.getExpirationTime().getTime() - cal.getTime().getTime() <= 0) {
+            registrationVerificationTokenRepository.delete(registrationVerificationToken);
+            return "expired";
+        }
+        user.setEnabled(true);
+        userRepository.save(user);
+        return "valid";
     }
 }
