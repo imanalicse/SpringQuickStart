@@ -3,11 +3,15 @@ package com.imanali.SpringQuickStart.auth;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.imanali.SpringQuickStart.config.JwtService;
 import com.imanali.SpringQuickStart.event.RegistrationCompleteEvent;
+import com.imanali.SpringQuickStart.exception.RecordNotFoundException;
+import com.imanali.SpringQuickStart.model.PasswordResetToken;
 import com.imanali.SpringQuickStart.model.User;
+import com.imanali.SpringQuickStart.repository.PasswordResetTokenRepository;
 import com.imanali.SpringQuickStart.repository.UserRepository;
 import com.imanali.SpringQuickStart.token.Token;
 import com.imanali.SpringQuickStart.token.TokenRepository;
 import com.imanali.SpringQuickStart.token.TokenType;
+import com.imanali.SpringQuickStart.util.CommonUtil;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -19,16 +23,20 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
 public class AuthenticationService {
-    private final UserRepository repository;
+    private final UserRepository userRepository;
     private final TokenRepository tokenRepository;
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
     private final ApplicationEventPublisher publisher;
+    private final PasswordResetTokenRepository passwordResetTokenRepository;
     public AuthenticationResponse register(RegisterRequest registerRequest, HttpServletRequest request) {
         var user = User.builder()
                 .firstName(registerRequest.getFirstName())
@@ -37,7 +45,7 @@ public class AuthenticationService {
                 .password(passwordEncoder.encode(registerRequest.getPassword()))
                 .role(registerRequest.getRole())
                 .build();
-        var savedUser = repository.save(user);
+        var savedUser = userRepository.save(user);
         publisher.publishEvent(new RegistrationCompleteEvent(
                 savedUser,
                 applicationUrl(request)
@@ -56,7 +64,7 @@ public class AuthenticationService {
                         request.getPassword()
                 )
         );
-        var user = repository.findByEmail(request.getEmail())
+        var user = userRepository.findByEmail(request.getEmail())
                 .orElseThrow();
         return generateTokenResponse(user, true);
     }
@@ -71,7 +79,7 @@ public class AuthenticationService {
         refreshToken = authHeader.substring(7);
         userEmail = jwtService.extractUsername(refreshToken);
         if (userEmail != null) {
-            var user = this.repository.findByEmail(userEmail)
+            var user = this.userRepository.findByEmail(userEmail)
                     .orElseThrow();
             if (jwtService.isTokenValid(refreshToken, user)) {
                 var accessToken = jwtService.generateAccessToken(user);
@@ -126,5 +134,32 @@ public class AuthenticationService {
                 .expiresIn(jwtService.getAccessTokenExpiration())
                 .refreshToken(refreshToken)
                 .build();
+    }
+
+    public Object passwordResetRequest(PasswordResetModel passwordResetModel) throws RecordNotFoundException {
+        User user = userRepository.findByEmail(passwordResetModel.getEmail()).orElseThrow(()-> new RecordNotFoundException("User not found"));
+        PasswordResetToken existingPasswordResetToken = passwordResetTokenRepository.findByUserId(user.getId());
+        if (existingPasswordResetToken != null) {
+            passwordResetTokenRepository.delete(existingPasswordResetToken);
+        }
+        String token = UUID.randomUUID().toString();
+        PasswordResetToken passwordResetToken = new PasswordResetToken(user, token);
+        passwordResetTokenRepository.save(passwordResetToken);
+        String set_password_link = CommonUtil.getBaseUrl() + "/api/v1/auth/set-password/" + token;
+        Map<String, Object> ob = new HashMap<>();
+        ob.put("set_password_link", set_password_link);
+        ob.put("expired_in", 30*60);
+        return ob;
+    }
+
+    public String setNewPassword(String token, PasswordSetModel passwordSetModel) throws RecordNotFoundException {
+        PasswordResetToken passwordResetToken = passwordResetTokenRepository.findByToken(token);
+        if (passwordResetToken == null) {
+            throw new RecordNotFoundException("Resent url not exists");
+        }
+        User user = passwordResetToken.getUser();
+        user.setPassword(passwordEncoder.encode(passwordSetModel.getNewPassword()));
+        userRepository.save(user);
+        return "New password has been saved successfully";
     }
 }
