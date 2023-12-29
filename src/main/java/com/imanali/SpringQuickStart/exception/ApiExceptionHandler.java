@@ -33,4 +33,14 @@ public class ApiExceptionHandler {
         response.put("message", ex.getMessage());
         return response;
     }
+
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    @ExceptionHandler(UnauthorizedException.class)
+    public Map<String, Object> handleUnauthorizedException(UnauthorizedException exception) {
+        Map<String, Object> response = new HashMap<>();
+        response.put("status", false);
+        response.put("status_code", HttpStatus.UNAUTHORIZED.value());
+        response.put("message", exception.getMessage());
+        return response;
+    }
 }

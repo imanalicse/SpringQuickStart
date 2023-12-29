@@ -1,6 +1,7 @@
 package com.imanali.SpringQuickStart.auth;
 
 import com.imanali.SpringQuickStart.exception.RecordNotFoundException;
+import com.imanali.SpringQuickStart.exception.UnauthorizedException;
 import com.imanali.SpringQuickStart.service.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -9,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.naming.AuthenticationException;
 import java.io.IOException;
 
 @RestController
@@ -24,7 +26,7 @@ public class AuthenticationController {
     }
 
     @PostMapping("/authenticate")
-    public ResponseEntity<AuthenticationResponse> authenticateRequest(@RequestBody AuthenticationRequest request) {
+    public ResponseEntity<AuthenticationResponse> authenticateRequest(@RequestBody AuthenticationRequest request) throws UnauthorizedException {
         return ResponseEntity.ok(authenticationService.authenticate(request));
     }
 

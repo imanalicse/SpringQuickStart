@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.imanali.SpringQuickStart.config.JwtService;
 import com.imanali.SpringQuickStart.event.RegistrationCompleteEvent;
 import com.imanali.SpringQuickStart.exception.RecordNotFoundException;
+import com.imanali.SpringQuickStart.exception.UnauthorizedException;
 import com.imanali.SpringQuickStart.model.PasswordResetToken;
 import com.imanali.SpringQuickStart.model.User;
 import com.imanali.SpringQuickStart.repository.PasswordResetTokenRepository;
@@ -57,16 +58,22 @@ public class AuthenticationService {
         return "http://" + request.getServerName() + ":" + request.getServerPort() + request.getContextPath();
     }
 
-    public AuthenticationResponse authenticate(AuthenticationRequest request) {
-        authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(
-                        request.getEmail(),
-                        request.getPassword()
-                )
-        );
-        var user = userRepository.findByEmail(request.getEmail())
-                .orElseThrow();
-        return generateTokenResponse(user, true);
+    public AuthenticationResponse authenticate(AuthenticationRequest request) throws UnauthorizedException {
+        try {
+            authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(
+                            request.getEmail(),
+                            request.getPassword()
+                    )
+            );
+
+            var user = userRepository.findByEmail(request.getEmail())
+                    .orElseThrow();
+            return generateTokenResponse(user, true);
+        }
+        catch (Exception e) {
+            throw new UnauthorizedException(e.getMessage());
+        }
     }
 
     public void refreshToken(HttpServletRequest request, HttpServletResponse response) throws IOException {
