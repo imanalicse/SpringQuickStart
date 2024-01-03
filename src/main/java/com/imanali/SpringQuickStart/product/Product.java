@@ -1,4 +1,4 @@
-package com.imanali.SpringQuickStart.model;
+package com.imanali.SpringQuickStart.product;
 
 import com.imanali.SpringQuickStart.category.Category;
 import jakarta.persistence.*;

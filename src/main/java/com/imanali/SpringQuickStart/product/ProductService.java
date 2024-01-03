@@ -1,8 +1,6 @@
-package com.imanali.SpringQuickStart.service;
+package com.imanali.SpringQuickStart.product;
 
 import com.imanali.SpringQuickStart.exception.RecordNotFoundException;
-import com.imanali.SpringQuickStart.model.Product;
-import com.imanali.SpringQuickStart.repository.ProductRepository;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;

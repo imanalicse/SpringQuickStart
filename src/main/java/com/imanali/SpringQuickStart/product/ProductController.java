@@ -1,10 +1,8 @@
-package com.imanali.SpringQuickStart.api.controller;
+package com.imanali.SpringQuickStart.product;
 
 import com.imanali.SpringQuickStart.api.response.DataResponseModel;
 import com.imanali.SpringQuickStart.api.response.ResponseHandler;
 import com.imanali.SpringQuickStart.exception.RecordNotFoundException;
-import com.imanali.SpringQuickStart.model.Product;
-import com.imanali.SpringQuickStart.service.ProductService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
@@ -24,7 +22,7 @@ import java.util.Map;
 @Tag(name = "Product")
 @RequestMapping(path = "api/v1/products")
 @PreAuthorize("hasRole('ADMIN')")
-public class ProductControllerV1 {
+public class ProductController {
 
     private ProductService productService;
     @GetMapping
