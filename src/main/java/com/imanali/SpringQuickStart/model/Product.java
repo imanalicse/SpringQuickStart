@@ -1,5 +1,6 @@
 package com.imanali.SpringQuickStart.model;
 
+import com.imanali.SpringQuickStart.category.Category;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.AllArgsConstructor;

@@ -1,7 +1,6 @@
 package com.imanali.SpringQuickStart.service;
 
 import com.imanali.SpringQuickStart.exception.RecordNotFoundException;
-import com.imanali.SpringQuickStart.model.Category;
 import com.imanali.SpringQuickStart.model.Product;
 import com.imanali.SpringQuickStart.repository.ProductRepository;
 import lombok.AllArgsConstructor;

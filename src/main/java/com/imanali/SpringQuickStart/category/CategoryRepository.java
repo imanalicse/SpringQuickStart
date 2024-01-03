@@ -1,6 +1,5 @@
 package com.imanali.SpringQuickStart.category;
 
-import com.imanali.SpringQuickStart.model.Category;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

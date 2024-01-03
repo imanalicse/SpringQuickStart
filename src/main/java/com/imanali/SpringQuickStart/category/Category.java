@@ -1,4 +1,4 @@
-package com.imanali.SpringQuickStart.model;
+package com.imanali.SpringQuickStart.category;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotEmpty;

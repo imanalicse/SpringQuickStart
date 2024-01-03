@@ -2,7 +2,6 @@ package com.imanali.SpringQuickStart.category;
 
 import com.imanali.SpringQuickStart.api.response.DataResponseModel;
 import com.imanali.SpringQuickStart.api.response.ResponseHandler;
-import com.imanali.SpringQuickStart.model.Category;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
