@@ -31,7 +31,7 @@ public class User implements UserDetails {
 
     private String lastName;
 
-    @Column(name = "email", nullable = false)
+    @Column(nullable = false, unique = true, name = "email")
     private String email;
 
     @Column(length = 60)

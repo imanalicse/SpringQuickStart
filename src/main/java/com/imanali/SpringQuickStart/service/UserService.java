@@ -52,4 +52,8 @@ public class UserService {
         userRepository.save(user);
         return "valid";
     }
+
+    public void save(User user) {
+        userRepository.save(user);
+    }
 }
