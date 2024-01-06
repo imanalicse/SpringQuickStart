@@ -56,4 +56,12 @@ public class UserService {
     public void save(User user) {
         userRepository.save(user);
     }
+
+    public void delete(Long id) throws UserNotFoundException {
+        boolean exists = userRepository.existsById(id);
+        if (!exists) {
+            throw new UserNotFoundException("User not found");
+        }
+        userRepository.deleteById(id);
+    }
 }
