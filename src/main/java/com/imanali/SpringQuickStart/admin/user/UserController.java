@@ -1,4 +1,4 @@
-package com.imanali.SpringQuickStart.user;
+package com.imanali.SpringQuickStart.admin.user;
 
 import com.imanali.SpringQuickStart.exception.UserNotFoundException;
 import com.imanali.SpringQuickStart.model.Role;
@@ -8,15 +8,13 @@ import lombok.AllArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
 @AllArgsConstructor
 @Controller
+@RequestMapping("/admin")
 public class UserController {
     private final UserService userService;
     private final PasswordEncoder passwordEncoder;
@@ -24,13 +22,13 @@ public class UserController {
     public String showUserList(Model model) {
         List<User> listUsers = userService.getAllUsers();
         model.addAttribute("listUsers", listUsers);
-        return "users";
+        return "admin/user/index";
     }
     @GetMapping("/users/add")
     public String showNewForm(Model model) {
         model.addAttribute("user", new User());
         model.addAttribute("pageTitle", "Add new User");
-        return "user_form";
+        return "admin/user/form";
     }
 
     @PostMapping("/users/save")
@@ -43,7 +41,7 @@ public class UserController {
             message = "User has been edited successfully";
         }
         redirectAttributes.addFlashAttribute("message", message);
-        return "redirect:/users";
+        return "redirect:/admin/users";
     }
 
     @GetMapping("users/edit/{id}")
@@ -53,11 +51,11 @@ public class UserController {
             User user = userService.getUser(id);
             model.addAttribute("user", user);
             model.addAttribute("pageTitle", "Edit User");
-            return "user_form";
+            return "admin/users/form";
         }
         catch (UserNotFoundException e) {
             redirectAttributes.addFlashAttribute("message", "The user not found");
-            return "redirect:/users";
+            return "redirect:/admin/users";
         }
     }
 
@@ -67,11 +65,11 @@ public class UserController {
         {
             userService.delete(id);
             redirectAttributes.addFlashAttribute("message", "User deleted successfully");
-            return "redirect:/users";
+            return "redirect:/admin/users";
         }
         catch (UserNotFoundException e) {
             redirectAttributes.addFlashAttribute("message", "The user not found");
-            return "redirect:/users";
+            return "redirect:/admin/users";
         }
     }
 }
